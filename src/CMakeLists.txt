@@ -9,3 +9,10 @@ add_executable(
         PFHExtraction.cc   
 )
 target_link_libraries(pfh_extraction algorithm_utils ${PCL_LIBRARIES})
+
+add_executable(
+    fpfh_extraction
+        FPFHExtraction.cc
+)
+
+target_link_libraries(fpfh_extraction algorithm_utils ${PCL_LIBRARIES})

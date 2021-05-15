@@ -6,7 +6,7 @@
 #include <pcl/point_types.h>
 #include <pcl/point_cloud.h>
 #include <pcl/features/normal_3d.h>
-#include <pcl/features/pfh.h>
+#include <pcl/features/fpfh.h>
 
 #include "Timer.hpp"
 #include "KittiLoader.hpp"
@@ -23,10 +23,10 @@ using pcl::PointXYZI;
 using pcl::NormalEstimation;
 using pcl::Normal;
 using pcl::search::KdTree;
-using pcl::PFHEstimation;
-using pcl::PFHSignature125;
+using pcl::FPFHEstimation;
+using pcl::FPFHSignature33;
 
-// Ref: https://pcl.readthedocs.io/projects/tutorials/en/latest/pfh_estimation.html#pfh-estimation
+// Ref: https://pcl.readthedocs.io/projects/tutorials/en/latest/fpfh_estimation.html#fpfh-estimation
 
 int main(int argc, char const *argv[]){
     if(argc != 2){
@@ -62,26 +62,26 @@ int main(int argc, char const *argv[]){
     cout << "Normal Estimation time (ms): " << span << endl;
 
     timer.Start();
-    // Create the PFH estimation class, and pass the input dataset+normals to it
-    PFHEstimation<PointXYZI, Normal, pcl::PFHSignature125> pfh;
-    pfh.setInputCloud(ptcloud);
-    pfh.setInputNormals(cloud_normals);
+    // Create the FPFH estimation class, and pass the input dataset+normals to it
+    FPFHEstimation<PointXYZI, Normal, FPFHSignature33> fpfh;
+    fpfh.setInputCloud(ptcloud);
+    fpfh.setInputNormals(cloud_normals);
 
     // Create an empty kdtree representation, and pass it to the PFH estimation object.
     // Its content will be filled inside the object, based on the given input dataset (as no other search surface is given).
-    pfh.setSearchMethod(tree);
+    fpfh.setSearchMethod(tree);
 
-    PointCloud<PFHSignature125>::Ptr pfhs(new PointCloud<PFHSignature125>());
+    PointCloud<FPFHSignature33>::Ptr fpfhs(new PointCloud<FPFHSignature33>());
     
     // Use all neighbors in a sphere of radius 10cm
     // IMPORTANT: the radius used here has to be larger than the radius used to estimate the surface normals!!!
-    pfh.setRadiusSearch(0.10);
+    fpfh.setRadiusSearch(0.10);
     span = timer.Stop();
     cout << "PFH computation preparation time (ms): " << span << endl;
 
     timer.Start();
     // Compute the features
-    pfh.compute (*pfhs);
+    fpfh.compute(*fpfhs);
     span = timer.Stop();
     cout << "Full pointcloud PFH computation time (ms): " << span << endl;
 
