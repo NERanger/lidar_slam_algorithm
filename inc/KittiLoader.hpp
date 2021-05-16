@@ -1,3 +1,9 @@
+/**
+ * File: KittiLoader.hpp
+ * Author: Jing Yonglin
+ * Description: Class definition for KITTI loader
+ */
+
 #ifndef LIDAR_ALGORITHM_KITTI_LOADER
 #define LIDAR_ALGORITHM_KITTI_LOADER
 

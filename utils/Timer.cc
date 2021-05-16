@@ -1,3 +1,9 @@
+/**
+ * File: Timer.cc
+ * Author: Jing Yonglin
+ * Description: Class implementation for a simple timer
+ */
+
 #include <chrono>
 #include <iostream>
 

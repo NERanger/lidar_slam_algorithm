@@ -1,3 +1,9 @@
+/**
+ * File: KittiLoader.hcc
+ * Author: Jing Yonglin
+ * Description: Class implementation for KITTI loader
+ */
+
 #include <memory>
 #include <fstream>
 #include <vector>
