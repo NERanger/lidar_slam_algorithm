@@ -15,8 +15,6 @@ public:
     static pcl::PointCloud<pcl::PointXYZI>::Ptr LoadSingleFrame(const std::string &path);
 
 private:
-    pcl::PointCloud<pcl::PointXYZI>::Ptr LoadFrame(const std::string &path);
-
     std::string path_;
     size_t current_idx_ = 0;
 };
