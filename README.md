@@ -1,10 +1,10 @@
 # LiDAR SLAM Algorithms
 
-LiDAR SLAM related algorithms mainly for myself. Currently all pointcloud used for test is from KITTI dataset. New data loader need to be implemented if a new dataset is used.
+LiDAR SLAM related algorithms mainly for myself. Currently all pointclouds used for test are from KITTI dataset. New data loader need to be implemented if a new dataset is used.
 
 ## Environment
 
-Ubuntu18.04 LTS (WSL2)
+Ubuntu 18.04 LTS (WSL2)
 
 ## Requirements
 
