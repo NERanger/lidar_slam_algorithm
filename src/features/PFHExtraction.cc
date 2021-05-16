@@ -31,7 +31,7 @@ using pcl::isFinite;
 
 int main(int argc, char const *argv[]){
     if(argc != 2){
-        cout << "Usage: PFH_extraction <path-to-pointcloud>" << endl;
+        cout << "Usage: pfh_extraction <path-to-pointcloud>" << endl;
         return EXIT_FAILURE;
     }
 

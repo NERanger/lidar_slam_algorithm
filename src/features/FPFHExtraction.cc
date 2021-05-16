@@ -31,7 +31,7 @@ using pcl::isFinite;
 
 int main(int argc, char const *argv[]){
     if(argc != 2){
-        cout << "Usage: PFH_extraction <path-to-pointcloud>" << endl;
+        cout << "Usage: fpfh_extraction <path-to-pointcloud>" << endl;
         return EXIT_FAILURE;
     }
 
@@ -53,7 +53,7 @@ int main(int argc, char const *argv[]){
     n.setSearchMethod(tree);
 
     PointCloud<Normal>::Ptr cloud_normals(new PointCloud<Normal>);
-    n.setRadiusSearch(0.10); // Estimation based on points within 5cm radius
+    n.setRadiusSearch(0.10); // Estimation based on points within 10cm radius
     span = timer.Stop();
     cout << "Normal Estimation preparation time (ms): " << span << endl;
 
