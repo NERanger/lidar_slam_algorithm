@@ -25,6 +25,7 @@ using pcl::Normal;
 using pcl::search::KdTree;
 using pcl::FPFHEstimation;
 using pcl::FPFHSignature33;
+using pcl::isFinite;
 
 // Ref: https://pcl.readthedocs.io/projects/tutorials/en/latest/fpfh_estimation.html#fpfh-estimation
 
@@ -52,7 +53,7 @@ int main(int argc, char const *argv[]){
     n.setSearchMethod(tree);
 
     PointCloud<Normal>::Ptr cloud_normals(new PointCloud<Normal>);
-    n.setRadiusSearch(0.05); // Estimation based on points within 5cm radius
+    n.setRadiusSearch(0.10); // Estimation based on points within 5cm radius
     span = timer.Stop();
     cout << "Normal Estimation preparation time (ms): " << span << endl;
 
@@ -60,6 +61,22 @@ int main(int argc, char const *argv[]){
     n.compute(*cloud_normals);
     span = timer.Stop();
     cout << "Normal Estimation time (ms): " << span << endl;
+
+    // Normal Nan check
+    // In production code, preprocessing steps and parameters should be set 
+    // so that normals are finite or raise an error.
+    int nan_count = 0;
+    for(size_t i = 0; i < cloud_normals->size(); i++){
+        if(!isFinite<Normal>(cloud_normals->at(i))){
+            nan_count += 1;
+        }
+    }
+    if(nan_count > 0){
+        cerr << "[Warning] Nan number in normal cloud: "
+             << nan_count << " [" 
+             << (float)nan_count / (float)cloud_normals->size()
+             << "%]" << endl;
+    }
 
     timer.Start();
     // Create the FPFH estimation class, and pass the input dataset+normals to it
@@ -77,13 +94,13 @@ int main(int argc, char const *argv[]){
     // IMPORTANT: the radius used here has to be larger than the radius used to estimate the surface normals!!!
     fpfh.setRadiusSearch(0.10);
     span = timer.Stop();
-    cout << "PFH computation preparation time (ms): " << span << endl;
+    cout << "FPFH computation preparation time (ms): " << span << endl;
 
     timer.Start();
     // Compute the features
     fpfh.compute(*fpfhs);
     span = timer.Stop();
-    cout << "Full pointcloud PFH computation time (ms): " << span << endl;
+    cout << "Full pointcloud FPFH computation time (ms): " << span << endl;
 
     return EXIT_SUCCESS;
 }

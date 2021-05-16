@@ -25,6 +25,7 @@ using pcl::Normal;
 using pcl::search::KdTree;
 using pcl::PFHEstimation;
 using pcl::PFHSignature125;
+using pcl::isFinite;
 
 // Ref: https://pcl.readthedocs.io/projects/tutorials/en/latest/pfh_estimation.html#pfh-estimation
 
@@ -52,7 +53,7 @@ int main(int argc, char const *argv[]){
     n.setSearchMethod(tree);
 
     PointCloud<Normal>::Ptr cloud_normals(new PointCloud<Normal>);
-    n.setRadiusSearch(0.05); // Estimation based on points within 5cm radius
+    n.setRadiusSearch(0.10); // Estimation based on points within 10cm radius
     span = timer.Stop();
     cout << "Normal Estimation preparation time (ms): " << span << endl;
 
@@ -60,6 +61,22 @@ int main(int argc, char const *argv[]){
     n.compute(*cloud_normals);
     span = timer.Stop();
     cout << "Normal Estimation time (ms): " << span << endl;
+
+    // Normal Nan check
+    // In production code, preprocessing steps and parameters should be set 
+    // so that normals are finite or raise an error.
+    int nan_count = 0;
+    for(size_t i = 0; i < cloud_normals->size(); i++){
+        if(!isFinite<Normal>(cloud_normals->at(i))){
+            nan_count += 1;
+        }
+    }
+    if(nan_count > 0){
+        cerr << "[Warning] Nan number in normal cloud: "
+             << nan_count << " [" 
+             << (float)nan_count / (float)cloud_normals->size()
+             << "%]" << endl;
+    }
 
     timer.Start();
     // Create the PFH estimation class, and pass the input dataset+normals to it
