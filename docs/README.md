@@ -14,3 +14,4 @@ Docs for algorithms in this repo.
 ### Filters
 
 * [Passthrough Filter](./filters/PassthroughFilter.md)
+* [Voxel Grid Filter](./filters/VoxelGridFilter.md)

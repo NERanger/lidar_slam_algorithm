@@ -14,6 +14,8 @@ using std::cerr;
 using std::endl;
 using std::string;
 
+// Ref: https://pcl.readthedocs.io/projects/tutorials/en/latest/voxel_grid.html#voxelgrid
+
 int main(int argc, char const *argv[]){
     if(argc != 2){
         cerr << "Usage: ./voxel_grid_filter <path-to-pointcloud>" << endl;
