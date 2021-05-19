@@ -52,17 +52,29 @@ int main(int argc, char const *argv[]){
     span = timer.Stop();
     cout << "Filtering time (ms): " << span << endl;
 
-    // Lower original pointcloud 10 for visualization
-    for(size_t i = 0; i < ptcloud->size(); ++i){
-        ptcloud->points[i].z -= 10.0;
-    }
+    pcl::visualization::PCLVisualizer::Ptr viewer
+        (new pcl::visualization::PCLVisualizer("Viewer"));
+    viewer->initCameraParameters();
 
-    pcl::visualization::CloudViewer viewer("Viewer");
+    // ID for viewport 1
+    int vp_1 = 0;
+    viewer->createViewPort(0.0, 0.0, 0.5, 1.0, vp_1);
+    viewer->setBackgroundColor(0.0, 0.0, 0.0, vp_1);
+    viewer->addText("Original pointcloud", 10, 10, "vp1_text", vp_1);
+    pcl::visualization::PointCloudColorHandlerGenericField<pcl::PointXYZI> vp1_color(ptcloud, "x");
+    viewer->addPointCloud<pcl::PointXYZI>(ptcloud, vp1_color, "origin_cloud", vp_1);
 
-    viewer.showCloud(ptcloud, "original cloud");
-    viewer.showCloud(filtered_cloud, "filtered cloud");
+    // ID for viewport 2
+    int vp_2 = 1;
+    viewer->createViewPort(0.5, 0.0, 1.0, 1.0, vp_2);
+    viewer->setBackgroundColor(0.5, 0.5, 0.5, vp_2);
+    viewer->addText("Filtered pointcloud", 10, 10, "vp2_text", vp_2);
+    pcl::visualization::PointCloudColorHandlerGenericField<pcl::PointXYZI> vp2_color(filtered_cloud, "x");
+    viewer->addPointCloud<pcl::PointXYZI>(filtered_cloud, vp2_color, "filtered_cloud", vp_2);
 
-    while(!viewer.wasStopped()){}
+    viewer->addCoordinateSystem(1.0);
+
+    viewer->spin();
 
     return EXIT_SUCCESS;
 }

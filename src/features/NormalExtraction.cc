@@ -57,8 +57,11 @@ int main(int argc, char const *argv[]){
     pcl::visualization::PCLVisualizer::Ptr
         viewer(new pcl::visualization::PCLVisualizer("Viewer"));
     viewer->setBackgroundColor(0.0, 0.0, 0.0);
+
+    // Set original point color as green
     pcl::visualization::PointCloudColorHandlerCustom<pcl::PointXYZI> 
         single_color(ptcloud, 0, 255, 0);
+    
     viewer->addPointCloud<PointXYZI>(ptcloud, single_color, "original cloud");
     viewer->addPointCloudNormals<PointXYZI, Normal>(ptcloud, cloud_normals, 20, 0.5, "normals");
     viewer->addCoordinateSystem(1.0);
