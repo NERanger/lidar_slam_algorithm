@@ -11,7 +11,7 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
 ############### Dependencies ####################
 # PCL
-find_package(PCL 1.2 REQUIRED COMPONENTS common features)
+find_package(PCL 1.2 REQUIRED COMPONENTS common features visualization)
 include_directories(${PCL_INCLUDE_DIRS})
 link_directories(${PCL_LIBRARY_DIRS})
 add_definitions(${PCL_DEFINITIONS})

@@ -1,5 +1,5 @@
 /**
- * File: KittiLoader.hcc
+ * File: KittiLoader.cc
  * Author: Jing Yonglin
  * Description: Class implementation for KITTI loader
  */
