@@ -1,24 +1,22 @@
 #include <iostream>
 #include <string>
 
-#include <pcl/point_types.h>
 #include <pcl/point_cloud.h>
-#include <pcl/filters/passthrough.h>
+#include <pcl/point_types.h>
+#include <pcl/filters/voxel_grid.h>
 #include <pcl/visualization/pcl_visualizer.h>
 
-#include "Timer.hpp"
 #include "KittiLoader.hpp"
+#include "Timer.hpp"
 
 using std::cout;
 using std::cerr;
 using std::endl;
 using std::string;
 
-// Ref: https://pcl.readthedocs.io/projects/tutorials/en/latest/passthrough.html#passthrough
-
 int main(int argc, char const *argv[]){
     if(argc != 2){
-        cout << "Usage: ./pass_through_filter <path-to-pointcloud>" << endl;
+        cerr << "Usage: ./voxel_grid_filter <path-to-pointcloud>" << endl;
         return EXIT_FAILURE;
     }
 
@@ -35,23 +33,22 @@ int main(int argc, char const *argv[]){
     cout << "Frame load time (ms): " << span << endl;
     cout << "Total point number: " << ptcloud->size() << endl;
 
-    pcl::PassThrough<pcl::PointXYZI> pt_filter;
-    pt_filter.setInputCloud(ptcloud);
-    pt_filter.setFilterFieldName("x");  // Filter x axis data only
-    pt_filter.setFilterLimits(0.0, 10.0);
-    // Uncomment the following line to try out
-    // pt_filter.setFilterLimitsNegative(true);
+    // Create filter obj
+    pcl::VoxelGrid<pcl::PointXYZI> vgf;
+    vgf.setInputCloud(ptcloud);
+    vgf.setLeafSize(0.3f, 0.3f, 0.3f);
 
     // Filtered_cloud
     pcl::PointCloud<pcl::PointXYZI>::Ptr 
         filtered_cloud(new pcl::PointCloud<pcl::PointXYZI>);
 
     timer.Start();
-    // Perform filtering
-    pt_filter.filter(*filtered_cloud);
+    vgf.filter(*filtered_cloud);
     span = timer.Stop();
-    cout << "Filtering time (ms): " << span << endl;
+    cout << "Voxel grid filtering time (ms): " << span << endl;
+    cout << "Filtered cloud size: " << filtered_cloud->size() << endl;
 
+    // Visualization
     pcl::visualization::PCLVisualizer::Ptr viewer
         (new pcl::visualization::PCLVisualizer("Viewer"));
     viewer->initCameraParameters();
@@ -61,15 +58,15 @@ int main(int argc, char const *argv[]){
     viewer->createViewPort(0.0, 0.0, 0.5, 1.0, vp_1);
     viewer->setBackgroundColor(0.0, 0.0, 0.0, vp_1);
     viewer->addText("Original pointcloud", 10, 10, "vp1_text", vp_1);
-    pcl::visualization::PointCloudColorHandlerGenericField<pcl::PointXYZI> vp1_color(ptcloud, "x");
+    pcl::visualization::PointCloudColorHandlerGenericField<pcl::PointXYZI> vp1_color(ptcloud, "y");
     viewer->addPointCloud<pcl::PointXYZI>(ptcloud, vp1_color, "origin_cloud", vp_1);
 
     // ID for viewport 2
     int vp_2 = 1;
     viewer->createViewPort(0.5, 0.0, 1.0, 1.0, vp_2);
-    viewer->setBackgroundColor(0.5, 0.5, 0.5, vp_2);
+    viewer->setBackgroundColor(0.3, 0.3, 0.3, vp_2);
     viewer->addText("Filtered pointcloud", 10, 10, "vp2_text", vp_2);
-    pcl::visualization::PointCloudColorHandlerGenericField<pcl::PointXYZI> vp2_color(filtered_cloud, "x");
+    pcl::visualization::PointCloudColorHandlerGenericField<pcl::PointXYZI> vp2_color(filtered_cloud, "y");
     viewer->addPointCloud<pcl::PointXYZI>(filtered_cloud, vp2_color, "filtered_cloud", vp_2);
 
     viewer->addCoordinateSystem(1.0);
