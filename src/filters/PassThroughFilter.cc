@@ -16,6 +16,8 @@ using std::cerr;
 using std::endl;
 using std::string;
 
+// Ref: https://pcl.readthedocs.io/projects/tutorials/en/latest/passthrough.html#passthrough
+
 int main(int argc, char const *argv[]){
     if(argc != 2){
         cout << "Usage: ./pass_through_filter <path-to-pointcloud>" << endl;
