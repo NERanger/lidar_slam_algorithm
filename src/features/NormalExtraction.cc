@@ -6,6 +6,7 @@
 #include <pcl/point_types.h>
 #include <pcl/point_cloud.h>
 #include <pcl/features/normal_3d.h>
+#include <pcl/visualization/pcl_visualizer.h>
 
 #include "Timer.hpp"
 #include "KittiLoader.hpp"
@@ -37,6 +38,7 @@ int main(int argc, char const *argv[]){
     PointCloud<PointXYZI>::Ptr ptcloud = KittiLoader::LoadSingleFrame(path);
     span = timer.Stop();
     cout << "Frame load time (ms): " << span << endl;
+    cout << "Total number of points in frame: " << ptcloud->size() << endl;
 
     timer.Start();
     NormalEstimation<PointXYZI, Normal> n;
@@ -46,10 +48,23 @@ int main(int argc, char const *argv[]){
     n.setSearchMethod(tree);
 
     PointCloud<Normal>::Ptr cloud_normals(new PointCloud<Normal>);
-    n.setRadiusSearch(0.05); // Estimation based on points within 5cm radius
+    n.setRadiusSearch(0.20); // Estimation based on points within 10cm radius
     n.compute(*cloud_normals);
     span = timer.Stop();
     cout << "Normal Estimation time (ms): " << span << endl;
+    cout << "Normal cloud size: " << cloud_normals->size() << endl;
+
+    pcl::visualization::PCLVisualizer::Ptr
+        viewer(new pcl::visualization::PCLVisualizer("Viewer"));
+    viewer->setBackgroundColor(0.0, 0.0, 0.0);
+    pcl::visualization::PointCloudColorHandlerCustom<pcl::PointXYZI> 
+        single_color(ptcloud, 0, 255, 0);
+    viewer->addPointCloud<PointXYZI>(ptcloud, single_color, "original cloud");
+    viewer->addPointCloudNormals<PointXYZI, Normal>(ptcloud, cloud_normals, 20, 0.5, "normals");
+    viewer->addCoordinateSystem(1.0);
+    viewer->initCameraParameters();
+
+    viewer->spin();
 
     return EXIT_SUCCESS;
 }
