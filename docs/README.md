@@ -15,3 +15,4 @@ Docs for algorithms in this repo.
 
 * [Passthrough Filter](./filters/PassthroughFilter.md)
 * [Voxel Grid Filter](./filters/VoxelGridFilter.md)
+* [Statistical Outlier Removal Filter](./filters/StatOutlierRemovalFilter.md)

@@ -9,3 +9,9 @@ add_executable(
         VoxelGridFilter.cc
 )
 target_link_libraries(voxel_grid_filter algorithm_utils ${PCL_LIBRARIES})
+
+add_executable(
+    stat_outlier_removal_filter 
+        StatOutlierRemovalFilter.cc
+)
+target_link_libraries(stat_outlier_removal_filter algorithm_utils ${PCL_LIBRARIES})
