@@ -1,2 +1,3 @@
 add_subdirectory(features)
 add_subdirectory(filters)
+add_subdirectory(range_image)

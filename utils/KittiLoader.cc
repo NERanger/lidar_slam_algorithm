@@ -54,5 +54,8 @@ PointCloud<PointXYZI>::Ptr KittiLoader::LoadSingleFrame(const string &path){
         lidar_frame_ptr->push_back(p);
     }
 
+    // lidar_frame_ptr->width = lidar_frame_ptr->size();
+    // lidar_frame_ptr->height = 1;
+
     return lidar_frame_ptr;
 }
