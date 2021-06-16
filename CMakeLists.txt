@@ -16,6 +16,10 @@ include_directories(${PCL_INCLUDE_DIRS})
 link_directories(${PCL_LIBRARY_DIRS})
 add_definitions(${PCL_DEFINITIONS})
 
+# OpenCV 3.4
+find_package(OpenCV 3.4 REQUIRED)
+include_directories(${OpenCV_INCLUDE_DIRS})
+
 ############### source ######################
 include_directories(${PROJECT_SOURCE_DIR}/inc)
 add_subdirectory(utils)

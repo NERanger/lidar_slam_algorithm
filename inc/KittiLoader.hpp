@@ -1,28 +1,39 @@
-/**
- * File: KittiLoader.hpp
- * Author: Jing Yonglin
- * Description: Class definition for KITTI loader
- */
-
-#ifndef LIDAR_ALGORITHM_KITTI_LOADER
-#define LIDAR_ALGORITHM_KITTI_LOADER
+#ifndef __KITTI_LOADER__
+#define __KITTI_LOADER__
 
 #include <string>
+#include <boost/filesystem/path.hpp>
 
 #include <pcl/point_types.h>
 #include <pcl/point_cloud.h>
 
+#include <opencv2/opencv.hpp>
+
+struct KittiFrame{
+    cv::Mat left_img;
+    cv::Mat right_img;
+    pcl::PointCloud<pcl::PointXYZI>::Ptr ptcloud;
+};
+
 class KittiLoader{
 public:
-    KittiLoader(const std::string &path) : path_(path){};
+    KittiLoader(const std::string &data_root, bool &if_success);
 
-    pcl::PointCloud<pcl::PointXYZI>::Ptr NextFrame();
+    size_t Size(){return size_;}
 
-    static pcl::PointCloud<pcl::PointXYZI>::Ptr LoadSingleFrame(const std::string &path);
+    KittiFrame operator[](size_t i) const;
+    
+    static pcl::PointCloud<pcl::PointXYZI>::Ptr LoadPtCloud(const std::string &path);
 
 private:
-    std::string path_;
-    size_t current_idx_ = 0;
+    size_t GetFileNumInDir(const boost::filesystem::path &p);
+
+    boost::filesystem::path root_;
+    boost::filesystem::path lidar_path_;
+    boost::filesystem::path left_img_path_;
+    boost::filesystem::path right_img_path_;
+
+    size_t size_ = 0;
 };
 
 #endif

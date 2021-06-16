@@ -4,4 +4,4 @@ add_library(
         Timer.cc
 )
 
-target_link_libraries(algorithm_utils ${PCL_LIBRARIES})
+target_link_libraries(algorithm_utils ${PCL_LIBRARIES} ${OpenCV_LIBS})

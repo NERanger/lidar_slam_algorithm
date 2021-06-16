@@ -34,7 +34,7 @@ int main(int argc, char const *argv[]){
     // Load pointcloud
     timer.Start();
     pcl::PointCloud<pcl::PointXYZI>::Ptr 
-        ptcloud = KittiLoader::LoadSingleFrame(path);
+        ptcloud = KittiLoader::LoadPtCloud(path);
     span = timer.Stop();
     cout << "Frame load time (ms): " << span << endl;
     cout << "Total point number: " << ptcloud->size() << endl;
